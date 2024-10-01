@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TumpleTestTGBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30f768bc34bed714b0a18ca3bf0942877b0f735d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+237fdfff4990186a30a113861835b15db3faf426")]
 [assembly: System.Reflection.AssemblyProductAttribute("TumpleTestTGBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TumpleTestTGBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

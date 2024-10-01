@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Tumple\\source\\repos\\GithubTumple\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{436F98AE-810C-4452-9AE9-EC6F439EA065}|TumpleTestTGBot\\TumpleTestTGBot.csproj|c:\\users\\tumple\\source\\repos\\githubtumple\\tumpletesttgbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{436F98AE-810C-4452-9AE9-EC6F439EA065}|TumpleTestTGBot\\TumpleTestTGBot.csproj|solutionrelative:tumpletesttgbot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{436F98AE-810C-4452-9AE9-EC6F439EA065}|TumpleTestTGBot\\TumpleTestTGBot.csproj|c:\\users\\tumple\\source\\repos\\githubtumple\\tumpletesttgbot\\drawwingfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{436F98AE-810C-4452-9AE9-EC6F439EA065}|TumpleTestTGBot\\TumpleTestTGBot.csproj|solutionrelative:tumpletesttgbot\\drawwingfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Tumple\\source\\repos\\GithubTumple\\TumpleTestTGBot\\Program.cs",
+              "RelativeDocumentMoniker": "TumpleTestTGBot\\Program.cs",
+              "ToolTip": "C:\\Users\\Tumple\\source\\repos\\GithubTumple\\TumpleTestTGBot\\Program.cs",
+              "RelativeToolTip": "TumpleTestTGBot\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-01T18:28:35.602Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DrawwingFile.cs",
+              "DocumentMoniker": "C:\\Users\\Tumple\\source\\repos\\GithubTumple\\TumpleTestTGBot\\DrawwingFile.cs",
+              "RelativeDocumentMoniker": "TumpleTestTGBot\\DrawwingFile.cs",
+              "ToolTip": "C:\\Users\\Tumple\\source\\repos\\GithubTumple\\TumpleTestTGBot\\DrawwingFile.cs",
+              "RelativeToolTip": "TumpleTestTGBot\\DrawwingFile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-01T18:28:34.201Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

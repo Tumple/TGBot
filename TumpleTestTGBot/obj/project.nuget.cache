@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1AvJ99GUhAc=",
+  "dgSpecHash": "By61gOIv0Rc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Tumple\\source\\repos\\TumpleTestTGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj",
+  "projectFilePath": "C:\\Users\\Tumple\\source\\repos\\GithubTumple\\TumpleTestTGBot\\TumpleTestTGBot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Tumple\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\Tumple\\.nuget\\packages\\microsoft.extensions.configuration.binder\\8.0.0\\microsoft.extensions.configuration.binder.8.0.0.nupkg.sha512",
