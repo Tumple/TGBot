@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Tumple\\source\\repos\\TumpleTestTGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj": {}
+    "C:\\Users\\tumpl\\source\\repos\\TGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Tumple\\source\\repos\\TumpleTestTGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj": {
+    "C:\\Users\\tumpl\\source\\repos\\TGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Tumple\\source\\repos\\TumpleTestTGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj",
+        "projectUniqueName": "C:\\Users\\tumpl\\source\\repos\\TGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj",
         "projectName": "TumpleTestTGBot",
-        "projectPath": "C:\\Users\\Tumple\\source\\repos\\TumpleTestTGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj",
-        "packagesPath": "C:\\Users\\Tumple\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Tumple\\source\\repos\\TumpleTestTGBot\\TumpleTestTGBot\\obj\\",
+        "projectPath": "C:\\Users\\tumpl\\source\\repos\\TGBot\\TumpleTestTGBot\\TumpleTestTGBot.csproj",
+        "packagesPath": "C:\\Users\\tumpl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tumpl\\source\\repos\\TGBot\\TumpleTestTGBot\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Tumple\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tumpl\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
