@@ -18,7 +18,7 @@ using System.Threading;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.IO.Pipes;
 
-internal class Program
+internal class Program //test commit
 {
     private static readonly Dictionary<long, UserState> UserStates = new Dictionary<long, UserState>();
     private static async Task Main(string[] args)
