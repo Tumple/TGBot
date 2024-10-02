@@ -17,6 +17,7 @@ using static System.Net.WebRequestMethods;
 using System.Threading;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.IO.Pipes;
+using Microsoft.Extensions.DependencyInjection;
 
 internal class Program //test commit
 {
@@ -34,6 +35,8 @@ internal class Program //test commit
 
         var me = await bot.GetMeAsync();
         bot.OnMessage += OnMessage;
+        bot.OnUpdate += OnUpdate;
+        
 
 
         Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -44,25 +47,29 @@ internal class Program //test commit
 
         async Task OnMessage(Message msg, UpdateType type)
         {
+            Update update = new Update();
             if (!UserStates.ContainsKey(msg.Chat.Id))
             {
                 UserStates[msg.Chat.Id] = new UserState { UserId = msg.Chat.Id, CurrentStep = 0 };
             }
+
             var userState = UserStates[msg.Chat.Id];
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine($"({msg.Chat.Id}) @{msg.Chat.Username.ToString()}\nСообщение '{msg.Text}'\n{DateTime.Now}\n");
             Console.ResetColor();
+        
 
-            switch (msg.Type.ToString())
+        switch (msg.Type.ToString())
             {
                 case "Text":
                 {
-                    switch (userState.CurrentStep)
+
+                        switch (userState.CurrentStep)
                     {
                         case 0:
                         {
-                            if (msg.Text.ToLower() == "/start")
+                            if (msg.Text == "/start")
                             {
                                 await bot.SendTextMessageAsync(msg.Chat, "Привет!\nЯ напишу тебе заявление.\nДля начала отправь мне фото твоей росписи\nПример:", replyMarkup: new ReplyKeyboardRemove());
                                 FileStream fileStream = System.IO.File.Open((@"роспись.png"), FileMode.Open);
@@ -70,21 +77,47 @@ internal class Program //test commit
                                         chatId: msg.Chat.Id,
                                         photo: InputFile.FromStream(fileStream),
                                         cancellationToken: cts.Token);
-    }
+                            }
+                            else if (msg.Text == "/edit")
+                            {
+                                userState.CurrentStep = 1;
+                                await bot.SendTextMessageAsync(msg.Chat, "Отправь свое ФИО", replyMarkup: new ReplyKeyboardRemove());
+                                break;
+                            } 
+                            else if(msg.Text.ToLower() == "создать заявление")
+                            { 
+                                try
+                                {
+                                    userState.Date = msg.Text;
+                                    userState.CurrentStep = 0;
+
+                                    await bot.SendPhotoAsync(
+                                    chatId: msg.Chat.Id,
+                                    photo: InputFile.FromStream(System.IO.File.Open(DrawwingFile.DrawwingFile1(msg.Chat.Username.ToString()), FileMode.Open)),
+                                    cancellationToken: cts.Token);
+
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    Console.WriteLine($"Заявление отправлено для @{msg.Chat.Username.ToString()}\n");
+                                    Console.ResetColor();
+
+                                    await bot.SendTextMessageAsync(msg.Chat, "Готово!\nТеперь отправляй своему куратору и кайфуй");
+                                    await bot.SendTextMessageAsync(msg.Chat, "Чтобы начать работать с ботом отправьте /start",
+                                        replyMarkup: new ReplyKeyboardMarkup(true).AddButtons("/start"));
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex);
+                                }
+                                break;
+                            }
                             else
                             {
                                 await bot.SendTextMessageAsync(msg.Chat.Id, "Неизвестная команда. Используйте /start для начала.");
                             }
                             break;
                         }
-
-
                         case 1:
                         {
-                            using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", false))
-                            {
-                                await sr.WriteLineAsync(msg.Text);
-                            }
                             userState.FullName = msg.Text;
                             userState.CurrentStep = 2;
                             await bot.SendTextMessageAsync(msg.Chat.Id, "Пожалуйста, введите номер группы:");
@@ -94,10 +127,6 @@ internal class Program //test commit
 
                         case 2:
                         {
-                            using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", true))
-                            {
-                                await sr.WriteLineAsync(msg.Text);
-                            }
                             userState.GroupNumber = msg.Text;
                             userState.CurrentStep = 3;
                             await bot.SendTextMessageAsync(msg.Chat.Id, "Пожалуйста, введите причину:");
@@ -107,10 +136,6 @@ internal class Program //test commit
 
                         case 3:
                         {
-                            using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", true))
-                            {
-                                await sr.WriteLineAsync(msg.Text);
-                            }
                             userState.Reason = msg.Text;
                             userState.CurrentStep = 4;
                             await bot.SendTextMessageAsync(msg.Chat.Id, "Пожалуйста, введите дату:");
@@ -120,29 +145,30 @@ internal class Program //test commit
 
                         case 4:
                         {
-                            try
+                                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
+{                                   
+                                        new[]
+                                        {
+                                            InlineKeyboardButton.WithCallbackData("ФИО", "ФИО"),
+                                            InlineKeyboardButton.WithCallbackData("Группа", "Группа"),
+
+                                            InlineKeyboardButton.WithCallbackData("Причина", "Причина"),
+                                            InlineKeyboardButton.WithCallbackData("Дата", "Дата"),
+
+                                            InlineKeyboardButton.WithCallbackData("создать заявление", "Заявление")
+                                        }
+                                    });
+                            using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", false))
                             {
-                                userState.Date = msg.Text;
-                                userState.CurrentStep = 0;
-
-                                await bot.SendPhotoAsync(
-                                chatId: msg.Chat.Id,
-                                photo: InputFile.FromStream(System.IO.File.Open(DrawwingFile.DrawwingFile1(msg.Chat.Username.ToString(), msg.Text), FileMode.Open)),
-                                cancellationToken: cts.Token);
-
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine($"Заявление отправлено для @{msg.Chat.Username.ToString()}\n");
-                                Console.ResetColor();
-
-                                await bot.SendTextMessageAsync(msg.Chat, "Готово!\nТеперь отправляй своему куратору и кайфуй");
-                                await bot.SendTextMessageAsync(msg.Chat, "Чтобы начать работать с ботом отправьте /start",
-                                    replyMarkup: new ReplyKeyboardMarkup(true).AddButtons("/start"));
+                                await sr.WriteLineAsync(userState.FullName);
+                                await sr.WriteLineAsync(userState.GroupNumber);
+                                await sr.WriteLineAsync(userState.Reason);
+                                await sr.WriteLineAsync(userState.Date);
                             }
-                            catch(Exception ex)
-                            {
-                                Console.WriteLine(ex);
-                            }
-
+                            userState.Date = msg.Text;
+                            await bot.SendTextMessageAsync(msg.Chat.Id, $"Проверь свои данные:\nФИО: {userState.FullName}\nНомер группы: {userState.GroupNumber}\nПричина: {userState.Reason}\nДата: {userState.Date}\nЕсли нужно исправить нажми /edit",
+                                replyMarkup: inlineKeyboard);
+                            userState.CurrentStep = 0;
                             break;
                         }
                     }
@@ -150,133 +176,62 @@ internal class Program //test commit
                 }
 
                 case "Photo":
-                {
-                    userState.CurrentStep = 1;
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"Получено фото\nОт ({msg.Chat.Id}) @{msg.Chat.Username.ToString()}\nВремя отправки: {DateTime.Now}\n");
-                    Console.ResetColor();
+                    {
+                        userState.CurrentStep = 1;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"Получено фото\nОт ({msg.Chat.Id}) @{msg.Chat.Username.ToString()}\nВремя отправки: {DateTime.Now}\n");
+                        Console.ResetColor();
 
-                    var fileInfo = await bot.GetFileAsync(msg.Photo.Last().FileId);
-                    var filePath = fileInfo.FilePath;
-                    await using Stream fileStream = System.IO.File.Create(@$"Росписи/{msg.Chat.Username.ToString()}.png");
-                    await bot.DownloadFileAsync(filePath, fileStream, cancellationToken: cts.Token);
-                    fileStream.Close();
+                        var fileInfo = await bot.GetFileAsync(msg.Photo.Last().FileId);
+                        var filePath = fileInfo.FilePath;
+                        await using Stream fileStream = System.IO.File.Create(@$"Росписи/{msg.Chat.Username.ToString()}.png");
+                        await bot.DownloadFileAsync(filePath, fileStream, cancellationToken: cts.Token);
+                        fileStream.Close();
 
-                    await bot.SendTextMessageAsync(msg.Chat, "Фотку получил!\nТеперь отправь свое ФИО");
+                        await bot.SendTextMessageAsync(msg.Chat, "Фотку получил!\nТеперь отправь свое ФИО");
 
-                    break;
-                }
-
+                        break;
+                    }
                 default:
                 {
                     await bot.SendTextMessageAsync(msg.Chat, "Я понимаю только текст и фото");
                     return;
                 }
-
             }
-
-           
         }
-        /*
-        // method that handle messages received by the bot:
-        async Task OnMessage(Message msg, UpdateType type)
+
+        async Task OnUpdate(Update update)
         {
-            if(!System.IO.File.Exists($"Данные/{msg.Chat.Username.ToString()}.txt"))
+            if(update.CallbackQuery != null)
             {
-                System.IO.File.Create($"Данные/{msg.Chat.Username.ToString()}.txt").Close();
-            }
-
-
-
-            if (msg.Type.ToString() == "Photo")
-            {
-                try
+                switch (update.CallbackQuery.Data)
                 {
-
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-                await bot.SendTextMessageAsync(msg.Chat, "Фотку получил!\nТеперь отправь свое ФИО\nПример:");
-                await bot.SendTextMessageAsync(msg.Chat, "1 Булдаков Владислав Александрович");//---------------------------------------------- 1
-
-            }
-            else if(msg.Type.ToString() == "Text")
-            {
-                var msgcheck = msg.Text.Split(' ');
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine($"Сообщение '{msg.Text}'\nОт ({msg.Chat.Id}) @{msg.Chat.Username.ToString()}\nВремя отправки: {DateTime.Now}\n");
-                Console.ResetColor();
-                switch (msgcheck[0])
-                {
-                    case "/start":
-                        await bot.SendTextMessageAsync(msg.Chat, "Привет\nЯ напишу тебе заявление.\nЧтобы продолжить нажми на кнопку",
-                            replyMarkup: new ReplyKeyboardMarkup(true)
-                            .AddButtons("Заявление"));
+                    case "ФИО":
+                        Console.WriteLine("ФИО");
                         break;
+                    case "Группа":
+                        Console.WriteLine("Группа");
+                        break;
+                    case "Причина":
+                        Console.WriteLine("Причина");
+                        break;
+                    case "Дата":
+                        Console.WriteLine("Дата");
+                        break;     
                     case "Заявление":
-                        await bot.SendTextMessageAsync(msg.Chat, "Мне нужна будет твоя информация!\nДля начала отправь мне фото твоей росписи!");
-                        await bot.SendTextMessageAsync(msg.Chat, "Пример", replyMarkup: new ReplyKeyboardRemove());
-                        FileStream fileStream = System.IO.File.Open((@"роспись.png"), FileMode.Open);
-                        await bot.SendPhotoAsync(
-                            msg.Chat.Id: msg.Chat.Id,
-                            photo: InputFile.FromStream(fileStream),
-                            cancellationToken: cts.Token);
-
-                        break;
-                    case "1":
-                        
-                        using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", false))
-                        {
-                            await sr.WriteLineAsync(msg.Text.Substring(2));
-                        }
-                        await bot.SendTextMessageAsync(msg.Chat, "Теперь отправь свою группу\nПример:");
-                        await bot.SendTextMessageAsync(msg.Chat, "2 3-ИСП9-34");
-                        break;
-                    case "2":
-                        using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", true))
-                        {
-                            await sr.WriteLineAsync(msg.Text.Substring(2));
-                        }
-                        await bot.SendTextMessageAsync(msg.Chat, "Теперь отправь причину отсутствия\nПример:");
-                        await bot.SendTextMessageAsync(msg.Chat, "3 Семейные обстоятельства");
-                        break;
-                    case "3":
-                        using (StreamWriter sr = new StreamWriter($"Данные/{msg.Chat.Username.ToString()}.txt", true))
-                        {
-                            await sr.WriteLineAsync(msg.Text.Substring(2));
-                        }
-                        await bot.SendTextMessageAsync(msg.Chat, "Теперь отправь дату отсутствия\nПример:");
-                        await bot.SendTextMessageAsync(msg.Chat, "4 01.05.2013");
-                        break;
-                    case "4":
-                        await bot.SendPhotoAsync(
-                        msg.Chat.Id: msg.Chat.Id,
-                        photo: InputFile.FromStream(System.IO.File.Open(DrawwingFile.DrawwingFile1(msg.Chat.Username.ToString(), msg.Text.Substring(2)), FileMode.Open)),
-                        cancellationToken: cts.Token);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Заявление отправлено для @{msg.Chat.Username.ToString()}\n");
-                        Console.ResetColor();
-                        await bot.SendTextMessageAsync(msg.Chat, "Готово!\nТеперь отправляй своему куратору и кайфуй");
-                        await bot.SendTextMessageAsync(msg.Chat, "Чтобы начать работать с ботом отправьте /start",
-                            replyMarkup: new ReplyKeyboardMarkup(true).AddButtons("/start"));
-                        break;
-                    default:
-                            await bot.SendTextMessageAsync(msg.Chat, "Напиши как в примере плиз");
-                        
+                        Console.WriteLine("Заявление");
                         break;
                 }
-
             }
             else
             {
-                await bot.SendTextMessageAsync(msg.Chat, "Я принимаю только фото и текст");
+                Console.WriteLine("Анлак");
             }
 
-            // comit
         }
-        */
+        async Task CreateFile()
+        {
+
+        }
     }
 }

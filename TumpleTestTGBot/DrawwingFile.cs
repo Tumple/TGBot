@@ -20,11 +20,11 @@ namespace TumpleTestTGBot
             int randomNumber = random.Next(1, 14);
             return randomNumber;
         }
-        public static string  DrawwingFile1(string username, string date) 
+        public static string  DrawwingFile1(string username) 
         {
-            string fullname, group, reason;
+            string fullname, group, reason, date;
             string[] fullname1;
-            string filename = $"Результаты/{username}+{DateTime.Now.ToShortDateString()}.png";
+            string filename = $"Результаты/{username}.png";
             try
             {
                 using (StreamReader sr = new StreamReader($"Данные/{username}.txt"))
@@ -32,6 +32,7 @@ namespace TumpleTestTGBot
                     fullname = sr.ReadLine();
                     group = sr.ReadLine();
                     reason = sr.ReadLine();
+                    date = sr.ReadLine();
                     fullname1 = fullname.Split(' ');
                 }
 
@@ -66,11 +67,9 @@ namespace TumpleTestTGBot
                         System.Drawing.Brush brush = Brushes.DarkBlue;
 
                         // Текст для записи
-                        string lines =
-                                    $"Директору ГБПОУ\nКолледжа связи 54\nПавлюку И. А.\nот студента гр.{group}\n{fullname1[0]} {fullname1[1][0]}. {fullname1[2][0]}.";
+                        string lines = $"Директору ГБПОУ\nКолледжа связи 54\nПавлюку И. А.\nот студента гр.{group}\n{fullname1[0]} {fullname1[1][0]}. {fullname1[2][0]}.";
 
-                        string lines2 =
-                                    $"      Я, {fullname}, студент группы {group} прошу Вас разрешить мне отсутствовать {date} на учебных занятиях по причине: {reason} \nОтветственность за изучение пропущенного материала беру на себя.";
+                        string lines2 =$"      Я, {fullname}, студент группы {group} прошу Вас разрешить мне отсутствовать {date} на учебных занятиях по причине: {reason} \nОтветственность за изучение пропущенного материала беру на себя.";
 
                         graphics.DrawString(lines, customFont, brush, 1400, 100);
                         graphics.DrawString("Заявление", customFont, brush, 1200, 1000);
